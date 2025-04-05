@@ -17,6 +17,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with: 
+          fetch-depth: 0
+      - name: Remove nested .git folders (if any)
+        run: |
+          find . -name ".git" -type d -not -path "./.git" -exec rm -rf {} +
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

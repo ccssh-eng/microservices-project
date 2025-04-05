@@ -33,7 +33,8 @@ jobs:
             cd $dir
             npm install
             if npm run | grep -q "test"; then
-              npm test || continue-on-error: true
+              npm test
+              continue-on-error: true
             else
               echo "No test script for $dir. Skipping."
             fi

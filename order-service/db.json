@@ -1,0 +1,6 @@
+{
+  "orders": [
+    { "id": 1001, "userId": 1, "productId": 101, "status": "shipped" },
+    { "id": 1002, "userId": 2, "productId": 102, "status": "processing" }
+  ]
+}

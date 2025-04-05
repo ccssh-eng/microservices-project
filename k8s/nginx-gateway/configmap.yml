@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    server {
+      listen 80;
+      server_name localhost;
+
+      location /auth/ {
+        proxy_pass http://auth-service:8080;
+      }
+
+      location /product/ {
+        proxy_pass http://product-service:8080;
+      }
+
+      location / {
+        proxy_pass http://frontend:80;
+      }
+    }

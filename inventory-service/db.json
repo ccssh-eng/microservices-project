@@ -1,0 +1,6 @@
+{
+  "inventory": [
+    { "productId": 101, "stock": 50 },
+    { "productId": 102, "stock": 30 }
+  ]
+}

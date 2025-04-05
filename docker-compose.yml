@@ -1,0 +1,117 @@
+version: '3.9'
+services:
+  # ====================
+  # Backend Microservices
+  # ====================
+
+  auth-service:
+    build:
+      context: ./auth-service
+    ports:
+      - "3001:3001"
+    restart: always # pour éviter les crashs non redémarrés
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/auth
+
+  product-service:
+    build: ./product-service
+    ports:
+      - "3002:3002"
+    restart: always # pour éviter les crashs non redémarrés
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/product
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "3003:3003"
+    restart: always # pour éviter les crashs non redémarrés
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/order
+
+  cart-service:
+    build: ./cart-service
+    ports:
+      - "3004:3004"
+    restart: always # pour éviter les crashs non redémarrés
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/cart
+
+  payment-service:
+    build: ./payment-service
+    ports:
+      - "3005:3005"
+
+  inventory-service:
+    build: ./inventory-service
+    ports:
+      - "3006:3006"
+    restart: always # pour éviter les crashs non redémarrés
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/inventory
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "3007:3007"
+    restart: always # pour éviter les crashs non redémarrés
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8081:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - auth-service
+      - product-service
+
+  mongo-seeder:
+    build: ./mongo-seeder
+    depends_on:
+      - mongo
+    volumes:
+      - ./auth-service:/app/auth-service
+      - ./product-service:/app/product-service
+      - ./order-service:/app/order-service
+      - ./cart-service:/app/cart-service
+      - ./inventory-service:/app/inventory-service
+      - ./notification-service:/app/notification-service
+    restart: "no"
+
+  # ====================
+  # Frontend (React)
+  # ====================
+  frontend:
+    build:
+      context: ./frontend
+    image: localhost:5000/my-frontend
+    ports:
+       - "3000:80"
+    depends_on:
+      - auth-service
+      - product-service
+      - cart-service
+
+  # ====================
+  # Shared MongoDB
+  # ====================
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

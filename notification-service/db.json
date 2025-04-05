@@ -1,0 +1,6 @@
+{
+  "notifications": [
+    { "id": 1, "userId": 1, "message": "Order shipped!" },
+    { "id": 2, "userId": 2, "message": "Your cart is waiting!" }
+  ]
+}

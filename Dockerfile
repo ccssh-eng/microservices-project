@@ -13,6 +13,6 @@ COPY . .
 
 
 # Expose port 3001
-EXPOSE 3001
+#EXPOSE 3001
 
 CMD ["npm", "start"]
